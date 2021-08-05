@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style type="text/css">
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      #canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+    </style>
+    <script async type="module">
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      let width = window.innerWidth;
+      let height = window.innerHeight;
+      let ballX = 50;
+
+      const draw = () => {
+        ctx.fillStyle = "rgba(0,0,0,1)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, canvas.height / 2 - 100, 10, 200);
+        ctx.fillStyle = "red";
+        ctx.fillRect(ballX, 200, 50, 25);
+      };
+
+      const move = () => {
+        if (ballX >= canvas.width) ballX = 0;
+        ballX += 10;
+      };
+
+      const animation = () => {
+        requestAnimationFrame(animation);
+        move();
+        draw();
+      };
+
+      window.onload = () => {
+        console.log("canvas : ", canvas);
+        canvas.width = width;
+        canvas.height = height;
+        animation();
+      };
+      window.onresize = () => {
+        console.log("resize");
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+      };
+    </script>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+  </body>
+</html>
