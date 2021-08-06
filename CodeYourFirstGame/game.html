@@ -24,19 +24,36 @@
       let width = window.innerWidth;
       let height = window.innerHeight;
       let ballX = 50;
+      let ballSpeedX = 10;
+      const barHeight = 200;
+      const barWidth = 10;
 
       const draw = () => {
-        ctx.fillStyle = "rgba(0,0,0,1)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "white";
-        ctx.fillRect(0, canvas.height / 2 - 100, 10, 200);
-        ctx.fillStyle = "red";
-        ctx.fillRect(ballX, 200, 50, 25);
+        const barY = canvas.height / 2 - barHeight / 2;
+        drawRect(0, 0, canvas.width, canvas.height, "rgba(0,0,0,1)");
+        drawRect(0, barY, barWidth, barHeight, "white");
+        drawCircle(ballX, 200, 10, "white");
       };
 
       const move = () => {
-        if (ballX >= canvas.width) ballX = 0;
-        ballX += 10;
+        ballX += ballSpeedX;
+        if (ballX >= canvas.width) {
+          ballSpeedX = -ballSpeedX;
+        } else if (ballX < 0) {
+          ballSpeedX = -ballSpeedX;
+        }
+      };
+
+      const drawRect = (leftX, topY, width, height, color) => {
+        ctx.fillStyle = color;
+        ctx.fillRect(leftX, topY, width, height);
+      };
+
+      const drawCircle = (x, y, radius, color) => {
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2, true);
+        ctx.fill();
       };
 
       const animation = () => {
