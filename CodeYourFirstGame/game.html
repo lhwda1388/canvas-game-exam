@@ -24,23 +24,54 @@
       let width = window.innerWidth;
       let height = window.innerHeight;
       let ballX = 50;
+      let ballY = 50;
       let ballSpeedX = 10;
-      const barHeight = 200;
-      const barWidth = 10;
+      let ballSpeedY = 4;
+      const PADDLE_HEIGHT = 100;
+      const PADDLE_WIDTH = 10;
+      let paddle1Y = 100;
+      let paddle2Y = 100;
+
+      const getYCenterPos = () => {
+        return canvas.height / 2 - PADDLE_HEIGHT / 2;
+      };
+
+      const calcMousePos = (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const root = document.documentElement;
+        const x = e.clientX - rect.left - root.scrollLeft;
+        const y = e.clientY - rect.top - root.scrollTop;
+        return {
+          x,
+          y,
+        };
+      };
 
       const draw = () => {
-        const barY = canvas.height / 2 - barHeight / 2;
         drawRect(0, 0, canvas.width, canvas.height, "rgba(0,0,0,1)");
-        drawRect(0, barY, barWidth, barHeight, "white");
-        drawCircle(ballX, 200, 10, "white");
+        drawRect(0, paddle1Y, PADDLE_WIDTH, PADDLE_HEIGHT, "white");
+        drawRect(
+          canvas.width - PADDLE_WIDTH,
+          paddle2Y,
+          PADDLE_WIDTH,
+          PADDLE_HEIGHT,
+          "white"
+        );
+        drawCircle(ballX, ballY, 10, "white");
       };
 
       const move = () => {
         ballX += ballSpeedX;
+        ballY += ballSpeedY;
         if (ballX >= canvas.width) {
           ballSpeedX = -ballSpeedX;
         } else if (ballX < 0) {
           ballSpeedX = -ballSpeedX;
+        }
+        if (ballY >= canvas.height) {
+          ballSpeedY = -ballSpeedY;
+        } else if (ballY < 0) {
+          ballSpeedY = -ballSpeedY;
         }
       };
 
@@ -62,18 +93,26 @@
         draw();
       };
 
-      window.onload = () => {
-        console.log("canvas : ", canvas);
-        canvas.width = width;
-        canvas.height = height;
-        animation();
-      };
-      window.onresize = () => {
-        console.log("resize");
+      const initialize = () => {
         width = window.innerWidth;
         height = window.innerHeight;
         canvas.width = width;
         canvas.height = height;
+        paddle1Y = getYCenterPos();
+        paddle2Y = getYCenterPos();
+      };
+
+      window.onload = () => {
+        initialize();
+        animation();
+        canvas.addEventListener("mousemove", (e) => {
+          const mousePos = calcMousePos(e);
+          paddle1Y = mousePos.y - PADDLE_HEIGHT / 2;
+        });
+      };
+
+      window.onresize = () => {
+        initialize();
       };
     </script>
   </head>
